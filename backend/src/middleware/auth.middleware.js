@@ -154,7 +154,6 @@ const verifyRefreshToken = (token) => {
 
 module.exports = {
     verifyToken,
-    protect: verifyToken, // Add protect as alias for verifyToken
     verifyAdmin,
     verifyTourist,
     optionalAuth,

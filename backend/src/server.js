@@ -23,7 +23,6 @@ const dashboardRoutes = require('./routes/dashboard.routes');
 const digitalIdRoutes = require('./routes/digitalid.routes');
 const touristRoutes = require('./routes/tourist.routes');
 const anomalyRoutes = require('./routes/anomaly.routes');
-const efirRoutes = require('./routes/efir.routes');
 
 // Import middleware
 const { verifyToken } = require('./middleware/auth.middleware');
@@ -89,7 +88,6 @@ app.use('/api/dashboard', securityMiddleware.apiLimiter, dashboardRoutes);
 app.use('/api/digital-id', securityMiddleware.apiLimiter, digitalIdRoutes);
 app.use('/api/tourists', securityMiddleware.apiLimiter, touristRoutes);
 app.use('/api/anomaly', securityMiddleware.apiLimiter, anomalyRoutes);
-app.use('/api/efir', securityMiddleware.apiLimiter, efirRoutes);
 
 // Serve static files from the frontend
 app.use(express.static(path.join(__dirname, '../../')));
