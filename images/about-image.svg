@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <!-- Background Elements -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5f7fa" />
+      <stop offset="100%" stop-color="#e4e7f0" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" />
+      <feOffset dx="2" dy="4" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main Background -->
+  <rect x="0" y="0" width="800" height="600" fill="url(#bg-gradient)" opacity="0.5" />
+  
+  <!-- Central Dashboard -->
+  <rect x="150" y="100" width="500" height="350" rx="10" fill="#ffffff" filter="url(#shadow)" />
+  
+  <!-- Dashboard Header -->
+  <rect x="150" y="100" width="500" height="60" rx="10" fill="#1a2b4a" />
+  <rect x="150" y="100" width="500" height="10" rx="10" fill="#2e5bff" />
+  
+  <!-- Dashboard Title -->
+  <text x="180" y="140" font-family="Arial" font-size="20" fill="#ffffff">Tourist Safety Monitoring Dashboard</text>
+  
+  <!-- Dashboard Controls -->
+  <rect x="500" y="120" width="120" height="25" rx="5" fill="rgba(255, 255, 255, 0.2)" />
+  <circle cx="515" cy="132" r="8" fill="#00c853" />
+  <text x="530" y="137" font-family="Arial" font-size="12" fill="#ffffff">LIVE DATA</text>
+  
+  <!-- Map Section -->
+  <rect x="170" y="180" width="300" height="250" rx="5" fill="#f0f4f8" />
+  
+  <!-- Map Content -->
+  <path d="M190,200 C240,180 270,230 320,210 C370,190 400,240 450,220 L450,400 C400,380 370,430 320,410 C270,390 240,440 190,420 Z" fill="#e4e7f0" />
+  
+  <!-- Map Grid Lines -->
+  <path d="M190,230 L450,230 M190,280 L450,280 M190,330 L450,330 M190,380 L450,380 M240,200 L240,420 M290,200 L290,420 M340,200 L340,420 M390,200 L390,420 M440,200 L440,420" stroke="#d0d5dd" stroke-width="1" stroke-dasharray="2,2" />
+  
+  <!-- Tourist Clusters -->
+  <circle cx="250" cy="250" r="15" fill="rgba(46, 91, 255, 0.5)" />
+  <circle cx="380" cy="320" r="20" fill="rgba(46, 91, 255, 0.5)" />
+  <circle cx="300" cy="370" r="10" fill="rgba(46, 91, 255, 0.5)" />
+  
+  <!-- Risk Zone -->
+  <path d="M410,230 C430,220 450,230 450,250 C450,270 430,280 410,270 C390,260 390,240 410,230 Z" fill="rgba(255, 107, 0, 0.3)" stroke="#ff6b00" stroke-width="1" stroke-dasharray="3,3" />
+  
+  <!-- Map Legend -->
+  <rect x="190" y="390" width="10" height="10" fill="rgba(46, 91, 255, 0.5)" />
+  <text x="205" y="400" font-family="Arial" font-size="10" fill="#666666">Tourist Clusters</text>
+  
+  <rect x="290" y="390" width="10" height="10" fill="rgba(255, 107, 0, 0.3)" />
+  <text x="305" y="400" font-family="Arial" font-size="10" fill="#666666">Risk Zones</text>
+  
+  <!-- Stats Section -->
+  <rect x="490" y="180" width="140" height="70" rx="5" fill="#ffffff" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="200" font-family="Arial" font-size="12" font-weight="bold" fill="#1a2b4a">Active Tourists</text>
+  <text x="505" y="230" font-family="Arial" font-size="24" fill="#2e5bff">1,248</text>
+  <path d="M505,240 L560,240" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="255" font-family="Arial" font-size="10" fill="#00c853">↑ 12% from yesterday</text>
+  
+  <rect x="490" y="260" width="140" height="70" rx="5" fill="#ffffff" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="280" font-family="Arial" font-size="12" font-weight="bold" fill="#1a2b4a">Safety Alerts</text>
+  <text x="505" y="310" font-family="Arial" font-size="24" fill="#ff6b00">7</text>
+  <path d="M505,320 L560,320" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="335" font-family="Arial" font-size="10" fill="#ff6b00">↑ 2 new alerts</text>
+  
+  <rect x="490" y="340" width="140" height="70" rx="5" fill="#ffffff" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="360" font-family="Arial" font-size="12" font-weight="bold" fill="#1a2b4a">Avg. Safety Score</text>
+  <text x="505" y="390" font-family="Arial" font-size="24" fill="#00c853">87</text>
+  <path d="M505,400 L560,400" stroke="#e4e7f0" stroke-width="1" />
+  <text x="505" y="415" font-family="Arial" font-size="10" fill="#00c853">↑ 3 points this week</text>
+  
+  <!-- Recent Alerts List -->
+  <rect x="170" y="440" width="460" height="90" rx="5" fill="#ffffff" stroke="#e4e7f0" stroke-width="1" />
+  <text x="190" y="465" font-family="Arial" font-size="12" font-weight="bold" fill="#1a2b4a">Recent Alerts</text>
+  
+  <!-- Alert Items -->
+  <rect x="190" y="475" width="420" height="1" fill="#e4e7f0" />
+  
+  <circle cx="200" cy="490" r="5" fill="#ff6b00" />
+  <text x="215" y="494" font-family="Arial" font-size="10" fill="#1a2b4a">Tourist ID #T-8742 entered restricted area</text>
+  <text x="500" y="494" font-family="Arial" font-size="10" fill="#666666">10:42 AM</text>
+  
+  <circle cx="200" cy="510" r="5" fill="#ff6b00" />
+  <text x="215" y="514" font-family="Arial" font-size="10" fill="#1a2b4a">Anomaly detected: 3 tourists inactive for 2+ hours</text>
+  <text x="500" y="514" font-family="Arial" font-size="10" fill="#666666">09:15 AM</text>
+  
+  <!-- Mobile App Integration -->
+  <g transform="translate(650, 400)">
+    <!-- Phone Outline -->
+    <rect x="-40" y="-80" width="80" height="160" rx="10" fill="#1a2b4a" />
+    <rect x="-35" y="-75" width="70" height="150" rx="5" fill="#ffffff" />
+    
+    <!-- App Screen -->
+    <rect x="-30" y="-70" width="60" height="10" rx="2" fill="#2e5bff" />
+    <text x="-25" y="-62" font-family="Arial" font-size="6" fill="#ffffff">KAVACH 360</text>
+    
+    <!-- Map on Screen -->
+    <rect x="-30" y="-55" width="60" height="60" rx="2" fill="#f0f4f8" />
+    <circle cx="0" cy="-25" r="5" fill="#2e5bff" opacity="0.7" />
+    <circle cx="0" cy="-25" r="10" fill="none" stroke="#2e5bff" stroke-width="1" stroke-dasharray="2,2" />
+    
+    <!-- Alert Section -->
+    <rect x="-30" y="10" width="60" height="25" rx="2" fill="rgba(255, 107, 0, 0.1)" />
+    <circle cx="-20" cy="22" r="5" fill="#ff6b00" opacity="0.7" />
+    <rect x="-10" y="17" width="30" height="3" rx="1" fill="#1a2b4a" />
+    <rect x="-10" y="23" width="20" height="3" rx="1" fill="#666666" />
+    
+    <!-- Bottom Navigation -->
+    <rect x="-30" y="40" width="60" height="15" rx="2" fill="#f5f7fa" />
+    <circle cx="-15" cy="47" r="3" fill="#2e5bff" />
+    <circle cx="0" cy="47" r="3" fill="#d0d5dd" />
+    <circle cx="15" cy="47" r="3" fill="#d0d5dd" />
+    
+    <!-- SOS Button -->
+    <circle cx="0" cy="65" r="10" fill="#ff6b00" />
+    <text x="-5" y="68" font-family="Arial" font-size="8" font-weight="bold" fill="#ffffff">SOS</text>
+  </g>
+  
+  <!-- Blockchain Elements -->
+  <g transform="translate(100, 300)">
+    <rect x="0" y="0" width="30" height="30" rx="3" fill="#2e5bff" opacity="0.8" />
+    <rect x="40" y="0" width="30" height="30" rx="3" fill="#2e5bff" opacity="0.7" />
+    <rect x="80" y="0" width="30" height="30" rx="3" fill="#2e5bff" opacity="0.6" />
+    <rect x="20" y="40" width="30" height="30" rx="3" fill="#2e5bff" opacity="0.7" />
+    <rect x="60" y="40" width="30" height="30" rx="3" fill="#2e5bff" opacity="0.8" />
+    
+    <line x1="30" y1="15" x2="40" y2="15" stroke="#ffffff" stroke-width="2" />
+    <line x1="70" y1="15" x2="80" y2="15" stroke="#ffffff" stroke-width="2" />
+    <line x1="15" y1="30" x2="15" y2="40" stroke="#ffffff" stroke-width="2" />
+    <line x1="35" y1="30" x2="35" y2="40" stroke="#ffffff" stroke-width="2" />
+    <line x1="50" y1="30" x2="50" y2="40" stroke="#ffffff" stroke-width="2" />
+    <line x1="75" y1="30" x2="75" y2="40" stroke="#ffffff" stroke-width="2" />
+  </g>
+  
+  <!-- AI Elements -->
+  <g transform="translate(100, 150)">
+    <path d="M0,0 C10,-10 30,-10 40,0 C50,10 50,30 40,40 C30,50 10,50 0,40 C-10,30 -10,10 0,0 Z" fill="rgba(46, 91, 255, 0.2)" stroke="#2e5bff" stroke-width="1" />
+    <path d="M10,10 L30,10 M10,20 L30,20 M10,30 L30,30" stroke="#2e5bff" stroke-width="1" />
+    <circle cx="20" cy="20" r="15" fill="none" stroke="#2e5bff" stroke-width="1" stroke-dasharray="2,2" />
+  </g>
+  
+  <!-- IoT Wearable -->
+  <g transform="translate(700, 150)">
+    <rect x="-30" y="-10" width="60" height="20" rx="10" fill="#ffffff" stroke="#00c853" stroke-width="2" />
+    <circle cx="-15" cy="0" r="5" fill="rgba(0, 200, 83, 0.3)" />
+    <circle cx="0" cy="0" r="5" fill="#00c853" opacity="0.7" />
+    <rect x="15" y="-3" width="5" height="6" rx="1" fill="#1a2b4a" />
+    
+    <!-- Signal Waves -->
+    <path d="M-40,0 C-45,-5 -45,-15 -40,-20 C-35,-25 -25,-25 -20,-20" stroke="#00c853" stroke-width="1" stroke-dasharray="2,2" />
+    <path d="M-40,0 C-50,-10 -50,-30 -40,-40 C-30,-50 -10,-50 0,-40" stroke="#00c853" stroke-width="1" stroke-dasharray="2,2" />
+  </g>
+  
+  <!-- Multilingual Support -->
+  <g transform="translate(700, 250)">
+    <circle cx="0" cy="0" r="30" fill="rgba(46, 91, 255, 0.1)" />
+    <text x="-20" y="-10" font-family="Arial" font-size="8" fill="#1a2b4a">हिन्दी</text>
+    <text x="0" y="0" font-family="Arial" font-size="8" fill="#1a2b4a">English</text>
+    <text x="-15" y="10" font-family="Arial" font-size="8" fill="#1a2b4a">বাংলা</text>
+    <text x="5" y="20" font-family="Arial" font-size="8" fill="#1a2b4a">தமிழ்</text>
+  </g>
+</svg>

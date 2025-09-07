@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital ID Verification - Kavach360</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .verification-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .verification-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .qr-scanner {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .qr-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        /* QR Scanner */
+        .qr-scanner-container {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .scan-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .btn-scan, .btn-upload {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-scan:hover, .btn-upload:hover {
+            background-color: #0056b3;
+        }
+        
+        .verification-result {
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .verification-result.valid {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .verification-result.invalid {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .id-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .detail-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-valid {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-invalid {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .status-expired {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-verify {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .btn-verify:hover {
+            background: #0056b3;
+        }
+        
+        .btn-verify:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>Kavach360</h1>
+                    <p>Digital ID Verification</p>
+                </div>
+            </div>
+        </header>
+
+        <main class="verification-container">
+            <div class="verification-card">
+                <h2>Digital ID Verification</h2>
+                <p>Scan or enter QR code data to verify a digital ID</p>
+                
+                <div class="qr-scanner">
+                    <h3>Verify Digital ID</h3>
+                    <p>Scan a QR code or paste the QR code data below to verify the digital ID</p>
+                    
+                    <div class="scan-options">
+                        <button id="startScanBtn" class="btn-scan">
+                            <i class="fas fa-camera"></i> Scan QR Code
+                        </button>
+                        <label for="qrFileInput" class="btn-upload">
+                            <i class="fas fa-file-upload"></i> Upload QR Image
+                            <input type="file" id="qrFileInput" accept="image/*" style="display: none;">
+                        </label>
+                    </div>
+                    
+                    <div id="qrScanner" class="qr-scanner-container"></div>
+                    
+                    <textarea 
+                        id="qrDataInput" 
+                        class="qr-input" 
+                        placeholder="Paste QR code data here or scan QR code..."
+                        rows="4"
+                    ></textarea>
+                    <button id="verifyBtn" class="btn-verify">Verify Digital ID</button>
+                </div>
+                
+                <div id="verificationResult" class="verification-result">
+                    <h3 id="resultTitle"></h3>
+                    <div id="resultDetails"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- HTML5 QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    
+    <script>
+        // Verification functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const verifyBtn = document.getElementById('verifyBtn');
+            const qrDataInput = document.getElementById('qrDataInput');
+            const verificationResult = document.getElementById('verificationResult');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDetails = document.getElementById('resultDetails');
+            
+            // Initialize QR Scanner
+            const qrScannerElement = document.getElementById('qrScanner');
+            let html5QrCode;
+            let isScanning = false;
+            
+            // Start QR Scanner button
+            const startScanBtn = document.getElementById('startScanBtn');
+            if (startScanBtn && qrScannerElement) {
+                startScanBtn.addEventListener('click', function() {
+                    if (!isScanning) {
+                        qrScannerElement.style.display = 'block';
+                        // Initialize scanner if not already done
+                        if (!html5QrCode) {
+                            html5QrCode = new Html5Qrcode("qrScanner");
+                        }
+                        
+                        // Start scanning
+                        const qrConfig = { fps: 10, qrbox: 250 };
+                        html5QrCode.start(
+                            { facingMode: "environment" },
+                            qrConfig,
+                            onQrCodeSuccess,
+                            onQrCodeError
+                        ).then(() => {
+                            isScanning = true;
+                            startScanBtn.textContent = "Stop Camera";
+                        }).catch((err) => {
+                            console.error("Error starting QR scanner:", err);
+                            showNotification("Could not start camera. Please check permissions.", 'error');
+                        });
+                    } else {
+                        // Stop scanning
+                        if (html5QrCode) {
+                            html5QrCode.stop().then(() => {
+                                isScanning = false;
+                                startScanBtn.textContent = "Scan QR Code";
+                                qrScannerElement.style.display = 'none';
+                            }).catch((err) => {
+                                console.error("Error stopping QR scanner:", err);
+                            });
+                        }
+                    }
+                });
+            }
+            
+            // QR Code success callback
+            function onQrCodeSuccess(decodedText, decodedResult) {
+                // Stop scanning after successful scan
+                if (html5QrCode && isScanning) {
+                    html5QrCode.stop().then(() => {
+                        isScanning = false;
+                        if (startScanBtn) {
+                            startScanBtn.textContent = "Scan QR Code";
+                            qrScannerElement.style.display = 'none';
+                        }
+                        
+                        // Process the QR code data
+                        try {
+                            // Populate the input field with the QR code data
+                            qrDataInput.value = decodedText;
+                            // Trigger verification
+                            verifyBtn.click();
+                        } catch (error) {
+                            console.error("QR code parsing error:", error);
+                            showNotification("Invalid QR code format", 'error');
+                        }
+                    });
+                }
+            }
+            
+            // QR Code error callback
+            function onQrCodeError(error) {
+                // We don't need to do anything here as this is called frequently during scanning
+            }
+            
+            // File input for QR code upload
+            const qrFileInput = document.getElementById('qrFileInput');
+            if (qrFileInput) {
+                qrFileInput.addEventListener('change', function(e) {
+                    if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        
+                        // Initialize scanner if not already done
+                        if (!html5QrCode) {
+                            html5QrCode = new Html5Qrcode("qrScanner");
+                        }
+                        
+                        // Scan the uploaded file
+                        html5QrCode.scanFile(file, true)
+                            .then(decodedText => {
+                                try {
+                                    // Populate the input field with the QR code data
+                                    qrDataInput.value = decodedText;
+                                    // Trigger verification
+                                    verifyBtn.click();
+                                } catch (error) {
+                                    console.error("QR code parsing error:", error);
+                                    showNotification("Invalid QR code format", 'error');
+                                }
+                            })
+                            .catch(err => {
+                                console.error("QR code scanning error:", err);
+                                showNotification("Could not read QR code from image", 'error');
+                            });
+                    }
+                });
+            }
+
+            verifyBtn.addEventListener('click', async function() {
+                const qrData = qrDataInput.value.trim();
+                
+                if (!qrData) {
+                    showNotification('Please enter QR code data', 'error');
+                    return;
+                }
+
+                // Show loading state
+                verifyBtn.disabled = true;
+                verifyBtn.textContent = 'Verifying...';
+
+                try {
+                    const response = await fetch('http://localhost:3000/api/digital-id/verify', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ qrData })
+                    });
+
+                    if (response.ok) {
+                        const result = await response.json();
+                        const data = result.data;
+                        
+                        // Show verification result
+                        verificationResult.style.display = 'block';
+                        
+                        if (data.valid) {
+                            verificationResult.className = 'verification-result valid';
+                            resultTitle.textContent = '✅ Digital ID Verified Successfully';
+                            
+                            resultDetails.innerHTML = `
+                                <div class="id-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Digital ID</div>
+                                        <div class="detail-value">${data.digitalId}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Full Name</div>
+                                        <div class="detail-value">${data.fullName}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Nationality</div>
+                                        <div class="detail-value">${data.nationality}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Passport Number</div>
+                                        <div class="detail-value">${data.passportNumber}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Issue Date</div>
+                                        <div class="detail-value">${new Date(data.issueDate).toLocaleDateString()}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Expiry Date</div>
+                                        <div class="detail-value">${new Date(data.expiryDate).toLocaleDateString()}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Verification Status</div>
+                                        <div class="detail-value">
+                                            <span class="status-badge status-valid">${data.verificationStatus}</span>
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">KYC Verified</div>
+                                        <div class="detail-value">
+                                            <span class="status-badge ${data.kycVerified ? 'status-valid' : 'status-invalid'}">
+                                                ${data.kycVerified ? 'Yes' : 'No'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            verificationResult.className = 'verification-result invalid';
+                            resultTitle.textContent = '❌ Digital ID Verification Failed';
+                            
+                            let failureReasons = [];
+                            if (!data.isHashValid) failureReasons.push('Invalid blockchain hash');
+                            if (data.isExpired) failureReasons.push('ID has expired');
+                            if (data.status !== 'active') failureReasons.push('ID is not active');
+                            
+                            resultDetails.innerHTML = `
+                                <p><strong>Reasons for failure:</strong></p>
+                                <ul>
+                                    ${failureReasons.map(reason => `<li>${reason}</li>`).join('')}
+                                </ul>
+                                <div class="id-details">
+                                    <div class="detail-item">
+                                        <div class="detail-label">Digital ID</div>
+                                        <div class="detail-value">${data.digitalId || 'Unknown'}</div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <div class="detail-label">Status</div>
+                                        <div class="detail-value">
+                                            <span class="status-badge status-invalid">${data.status || 'Unknown'}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    } else {
+                        const error = await response.json();
+                        verificationResult.style.display = 'block';
+                        verificationResult.className = 'verification-result invalid';
+                        resultTitle.textContent = '❌ Verification Error';
+                        resultDetails.innerHTML = `<p>${error.message || 'Failed to verify digital ID'}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    verificationResult.style.display = 'block';
+                    verificationResult.className = 'verification-result invalid';
+                    resultTitle.textContent = '❌ Network Error';
+                    resultDetails.innerHTML = '<p>Failed to connect to verification server. Please try again.</p>';
+                } finally {
+                    // Reset button state
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Verify Digital ID';
+                }
+            });
+
+            // Auto-parse JSON if pasted
+            qrDataInput.addEventListener('paste', function(e) {
+                setTimeout(() => {
+                    const value = e.target.value.trim();
+                    try {
+                        const parsed = JSON.parse(value);
+                        e.target.value = JSON.stringify(parsed, null, 2);
+                    } catch (err) {
+                        // Not JSON, keep as is
+                    }
+                }, 100);
+            });
+        });
+
+        // Simple notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 6px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                max-width: 300px;
+                word-wrap: break-word;
+            `;
+            
+            switch (type) {
+                case 'success':
+                    notification.style.backgroundColor = '#28a745';
+                    break;
+                case 'error':
+                    notification.style.backgroundColor = '#dc3545';
+                    break;
+                case 'warning':
+                    notification.style.backgroundColor = '#ffc107';
+                    notification.style.color = '#212529';
+                    break;
+                default:
+                    notification.style.backgroundColor = '#17a2b8';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <!-- Production domains - HTTPS only -->
+        <domain includeSubdomains="true">kavach360.gov.in</domain>
+        <domain includeSubdomains="true">api.kavach360.gov.in</domain>
+    </domain-config>
+    
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Development domains - HTTP allowed -->
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+    </domain-config>
+    
+    <!-- Certificate pinning for production -->
+    <domain-config>
+        <domain includeSubdomains="true">kavach360.gov.in</domain>
+        <pin-set>
+            <!-- Add your certificate pins here for production -->
+            <!-- Example: <pin digest="SHA-256">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</pin> -->
+        </pin-set>
+    </domain-config>
+    
+    <!-- Debug configuration -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system"/>
+            <certificates src="user"/>
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

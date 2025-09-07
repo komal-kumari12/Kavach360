@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kavach360 - Register</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts - Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color Variables */
+            --primary-color: #4361ee;
+            --primary-light: #4895ef;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #00C853;
+            --warning-color: #FF9800;
+            --danger-color: #F44336;
+            --dark-color: #212121;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --gray-light: #e9ecef;
+            
+            /* Layout Variables */
+            --border-radius: 10px;
+            --card-border-radius: 15px;
+            --transition-speed: 0.3s;
+            
+            /* Shadow Variables */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 700;
+            font-size: 24px;
+        }
+        
+        .logo i {
+            color: var(--primary-color);
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .tagline {
+            font-size: 14px;
+            color: var(--gray-color);
+            margin-left: 10px;
+        }
+        
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-list li {
+            margin-left: 20px;
+        }
+        
+        .nav-list a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        
+        .nav-list a:hover {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--dark-color);
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        main {
+            padding-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .register-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background-color: white;
+            margin: 40px auto;
+        }
+        
+        .register-banner {
+            flex: 1;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .register-banner h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .register-banner p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+        
+        .register-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .feature i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .register-form-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .register-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .register-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .register-header p {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+        }
+        
+        .register-form button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .register-form button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .register-form button:disabled {
+            background-color: var(--gray-color);
+            cursor: not-allowed;
+        }
+        
+        .register-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        .register-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .register-container {
+                flex-direction: column;
+                max-width: 500px;
+            }
+            
+            .register-banner {
+                padding: 30px;
+            }
+            
+            .register-form-container {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-shield-alt"></i>
+                Kavach360
+            </a>
+            <span class="tagline">Tourist Safety Platform</span>
+            
+            <nav>
+                <ul class="nav-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+            </nav>
+            
+            <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <div class="register-container">
+                <div class="register-banner">
+                    <h1>Join Kavach360</h1>
+                    <p>Create your account to access our tourist safety platform and secure your travels</p>
+                    
+                    <div class="register-features">
+                        <div class="feature">
+                            <i class="fas fa-id-card"></i>
+                            <span>Digital ID</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Geofencing</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bell"></i>
+                            <span>Safety Alerts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="register-form-container">
+                    <div class="register-header">
+                        <h2>Create Your Account</h2>
+                        <p>Fill in your details to register</p>
+                    </div>
+                    
+                    <div id="register-alert" class="alert alert-danger"></div>
+                    <div id="register-success" class="alert alert-success"></div>
+                    
+                    <form class="register-form" id="register-form" method="POST" action="javascript:void(0);">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fullName">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="nationality">Nationality</label>
+                            <input type="text" id="nationality" name="nationality">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="passportNumber">Passport/ID Number</label>
+                            <input type="text" id="passportNumber" name="passportNumber">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="emergencyContact">Emergency Contact</label>
+                            <input type="text" id="emergencyContact" name="emergencyContact">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        
+                        <button type="submit" id="register-button">Register</button>
+                    </form>
+                    
+                    <div class="register-footer">
+                        <p>Already have an account? <a href="login.html">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const nav = document.querySelector('.nav');
+            
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    nav.classList.toggle('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 
+                        mobileMenuBtn.getAttribute('aria-expanded') === 'false' ? 'true' : 'false');
+                });
+            }
+            
+            // Registration form handling
+            const registerForm = document.getElementById('register-form');
+            const registerAlert = document.getElementById('register-alert');
+            const registerSuccess = document.getElementById('register-success');
+            const registerButton = document.getElementById('register-button');
+            
+            // Function to test server connection with retry
+            async function testServerConnection(retries = 3, delay = 1000) {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        console.log(`Testing server connection (attempt ${i + 1}/${retries})...`);
+                        
+                        // Create a timeout promise
+                        const timeoutPromise = new Promise((_, reject) => {
+                            setTimeout(() => reject(new Error('Request timeout')), 5000);
+                        });
+                        
+                        // Create the fetch promise
+                        const fetchPromise = fetch('http://localhost:3000/api/test', {
+                            credentials: 'include',
+                            mode: 'cors'
+                        });
+                        
+                        // Race between fetch and timeout
+                        const response = await Promise.race([fetchPromise, timeoutPromise]);
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        console.log('Test endpoint response:', data);
+                        console.log('Server connection successful!');
+                        
+                        // Hide any existing error messages
+                        registerAlert.style.display = 'none';
+                        return true;
+                    } catch (error) {
+                        console.error(`Server test attempt ${i + 1} failed:`, error);
+                        
+                        if (i === retries - 1) {
+                            // Last attempt failed
+                            registerAlert.textContent = 'Connection error: Unable to reach the server. Please check if the server is running.';
+                            registerAlert.style.display = 'block';
+                            return false;
+                        } else {
+                            // Wait before retrying
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        }
+                    }
+                }
+                return false;
+            }
+            
+            // Test server connection on page load
+            testServerConnection();
+
+            // Function to handle registration submission
+            async function handleRegisterSubmit(e) {
+                if (e) e.preventDefault();
+                console.log('Register form submit event triggered');
+                
+                // Get form values
+                const username = document.getElementById('username').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const fullName = document.getElementById('fullName').value.trim();
+                const nationality = document.getElementById('nationality').value.trim();
+                const passportNumber = document.getElementById('passportNumber').value.trim();
+                const emergencyContact = document.getElementById('emergencyContact').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                console.log('Register form values captured:', { 
+                    username, email, fullName, nationality, 
+                    passportNumber, emergencyContact, 
+                    password: '***', confirmPassword: '***' 
+                });
+                
+                // Basic validation
+                if (!username || !email || !password || !confirmPassword || !fullName) {
+                    registerAlert.textContent = 'Please fill in all required fields.';
+                    registerAlert.style.display = 'block';
+                    return;
+                }
+                
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    registerAlert.textContent = 'Passwords do not match';
+                    registerAlert.style.display = 'block';
+                    return;
+                }
+                
+                // Test server connection first
+                const serverConnected = await testServerConnection(1, 500);
+                if (!serverConnected) {
+                    return; // Error message already shown by testServerConnection
+                }
+                
+                // Hide any previous alerts
+                registerAlert.style.display = 'none';
+                registerSuccess.style.display = 'none';
+                
+                // Validate password strength
+                if (password.length < 6) {
+                    registerAlert.textContent = 'Password must be at least 6 characters long';
+                    registerAlert.style.display = 'block';
+                    return;
+                }
+                
+                // Disable the register button to prevent double submission
+                registerButton.disabled = true;
+                registerButton.textContent = 'Registering...';
+                
+                // Call the register API using fetch
+                console.log('Attempting registration with:', { username, email });
+                console.log('Sending POST request to register API with full data:', JSON.stringify({ 
+                    username, email, password, fullName, nationality, passportNumber, emergencyContact 
+                }));
+                
+                fetch('http://localhost:3000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include', // Important for cookies
+                    mode: 'cors', // Explicitly set CORS mode
+                    body: JSON.stringify({ 
+                        username, 
+                        email, 
+                        password, 
+                        fullName, 
+                        nationality, 
+                        passportNumber, 
+                        emergencyContact 
+                    })
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    
+                    if (!response.ok) {
+                        // Try to parse error response
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                        }).catch(() => {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Registration response:', data);
+                    
+                    if (data.status === 'success' && data.data && data.data.token) {
+                        // Store token in localStorage as backup
+                        // The server also sets it as an HTTP-only cookie
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('user', JSON.stringify(data.data.user));
+                        
+                        // Show success message
+                        registerSuccess.textContent = 'Registration successful! Redirecting to dashboard...';
+                        registerSuccess.style.display = 'block';
+                        
+                        // Redirect to dashboard after 1.5 seconds
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                    } else {
+                        // Show error message
+                        registerAlert.textContent = data.message || 'Registration failed. Please try again.';
+                        registerAlert.style.display = 'block';
+                        
+                        // Re-enable the register button
+                        registerButton.disabled = false;
+                        registerButton.textContent = 'Register';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    registerAlert.textContent = error.message || 'Connection error: Unable to reach the server. Please check if the server is running.';
+                    registerAlert.style.display = 'block';
+                    
+                    // Re-enable the register button
+                    registerButton.disabled = false;
+                    registerButton.textContent = 'Register';
+                });
+            }
+            
+            // Add event listeners
+            registerForm.addEventListener('submit', handleRegisterSubmit);
+            
+            // Add a direct click handler to the register button as well
+            registerButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Register button clicked directly');
+                handleRegisterSubmit();
+            });
+        });
+    </script>
+</body>
+</html>

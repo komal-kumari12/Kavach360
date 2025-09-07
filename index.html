@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KAVACH 360 - Smart Tourist Safety Monitoring & Incident Response System using AI, Blockchain, and Geo-Fencing technologies">
+    <meta name="keywords" content="tourist safety, blockchain ID, geo-fencing, AI detection, tourism security">
+    <title>KAVACH 360 - Smart Tourist Safety System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+    :root {
+        --primary-color: #4a6fa5;
+        --secondary-color: #166088;
+        --accent-color: #4caf50;
+        --light-color: #f4f4f4;
+        --dark-color: #333;
+        --max-width: 1100px;
+        --success-color: #28a745;
+        --danger-color: #dc3545;
+        --warning-color: #ffc107;
+    }
+    
+    /* Verify Section Styles */
+    .verify {
+        background-color: var(--light-color);
+        padding: 60px 0;
+    }
+    
+    .verify-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        margin-top: 40px;
+    }
+    
+    .verify-options {
+        flex: 1;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .verify-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+    }
+    
+    .verify-card h3 {
+        color: var(--secondary-color);
+        margin-bottom: 15px;
+        font-size: 1.2rem;
+    }
+    
+    .qr-scanner-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .qr-scanner {
+        width: 100%;
+        max-width: 300px;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: #000;
+    }
+    
+    .scanner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .scanner-frame {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 200px;
+        height: 200px;
+        transform: translate(-50%, -50%);
+        border: 2px solid var(--accent-color);
+        border-radius: 10px;
+    }
+    
+    .scanner-animation {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 200px;
+        height: 2px;
+        background-color: var(--accent-color);
+        transform: translate(-50%, -50%);
+        animation: scan 2s infinite linear;
+    }
+    
+    @keyframes scan {
+        0% { top: calc(50% - 100px); }
+        50% { top: calc(50% + 100px); }
+        100% { top: calc(50% - 100px); }
+    }
+    
+    #qrVideo {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .qr-upload {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .file-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        border: 2px dashed var(--primary-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .file-upload-label:hover {
+        background-color: rgba(74, 111, 165, 0.1);
+    }
+    
+    .file-upload-label i {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .file-upload-input {
+        display: none;
+    }
+    
+    .upload-info {
+        font-size: 0.8rem;
+        color: #666;
+    }
+    
+    .verification-result {
+        flex: 1;
+        min-width: 300px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+    
+    .result-header {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 15px 20px;
+    }
+    
+    .result-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    
+    .result-content {
+        padding: 20px;
+    }
+    
+    .result-placeholder {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 300px;
+        text-align: center;
+        color: #888;
+    }
+    
+    .result-placeholder i {
+        font-size: 4rem;
+        margin-bottom: 15px;
+        color: #ccc;
+    }
+    
+    .result-status {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        border-radius: 8px;
+        background-color: rgba(40, 167, 69, 0.1);
+        margin-bottom: 20px;
+    }
+    
+    .status-icon i {
+        font-size: 2.5rem;
+        color: var(--success-color);
+    }
+    
+    .status-text h4 {
+        margin: 0 0 5px 0;
+        color: var(--success-color);
+    }
+    
+    .status-text p {
+        margin: 0;
+    }
+    
+    .tourist-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .info-label {
+        font-size: 0.8rem;
+        color: #666;
+    }
+    
+    .info-value {
+        font-weight: 500;
+        color: var(--dark-color);
+    }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>KAVACH 360</h1>
+                <p class="tagline">Smart Tourist Safety & Incident Response System</p>
+            </div>
+            <nav class="nav" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="#home" aria-current="page">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#download">Download</a></li>
+                    <li><a href="#verify">Verify ID</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero" aria-labelledby="hero-heading">
+        <div class="container">
+            <div class="hero-content">
+                <h2 id="hero-heading">Ensuring Tourist Safety with Advanced Technology</h2>
+                <p>A comprehensive safety solution leveraging AI, Blockchain, and Geo-Fencing to protect tourists in unfamiliar territories.</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">Download App</a>
+                    <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="images/hero-image.svg" alt="Tourist Safety System Illustration showing digital ID, geofencing, and mobile app integration" width="600" height="400">
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="features" aria-labelledby="features-heading">
+        <div class="container">
+            <div class="section-header">
+                <h2 id="features-heading">Key Features</h2>
+                <p>Our comprehensive safety ecosystem for tourists and authorities</p>
+            </div>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                    <h3>Digital Tourist ID</h3>
+                    <p>Secure blockchain-based digital IDs with KYC, trip itinerary, and emergency contacts.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Mobile Application</h3>
+                    <p>Tourist Safety Score, geo-fencing alerts, panic button, and optional tracking.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>AI Anomaly Detection</h3>
+                    <p>Detect location drop-offs, inactivity, or route deviations to flag potential distress.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Authority Dashboard</h3>
+                    <p>Real-time visualizations, tourist clusters, and automated E-FIR generation.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <h3>IoT Integration</h3>
+                    <p>Smart bands for high-risk areas with continuous health/location signals.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" aria-hidden="true">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3>Multilingual Support</h3>
+                    <p>Available in 10+ Indian languages with voice/text emergency access.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2>About KAVACH 360</h2>
+                <p>Revolutionizing tourist safety in high-risk regions</p>
+            </div>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="images/about-image.svg" alt="Tourist Safety System">
+                </div>
+                <div class="about-text">
+                    <h3>Background</h3>
+                    <p>In regions like the Northeast, where tourism is a key economic driver, ensuring the safety of visitors is paramount. Traditional policing and manual tracking methods are insufficient in remote and high-risk areas.</p>
+                    <h3>Our Solution</h3>
+                    <p>KAVACH 360 is a smart, technology-driven solution that ensures real-time monitoring, rapid response, and secure identity verification for tourists, while maintaining privacy and ease of travel.</p>
+                    <h3>Technology Stack</h3>
+                    <div class="tech-stack">
+                        <span class="tech-badge">AI/ML</span>
+                        <span class="tech-badge">Blockchain</span>
+                        <span class="tech-badge">Geo-Fencing</span>
+                        <span class="tech-badge">IoT</span>
+                        <span class="tech-badge">Real-time Analytics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>A seamless ecosystem for tourist safety</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Digital ID Registration</h3>
+                        <p>Tourists receive secure digital IDs at entry points with basic KYC and trip details.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Mobile App Activation</h3>
+                        <p>Tourists download the app and link their digital ID for real-time safety monitoring.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Real-time Monitoring</h3>
+                        <p>AI algorithms monitor tourist movements and detect potential safety concerns.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Incident Response</h3>
+                        <p>Authorities receive alerts and can respond quickly to any safety incidents.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download">
+        <div class="container">
+            <div class="section-header">
+                <h2>Download the App</h2>
+                <p>Available for tourists and authorities</p>
+            </div>
+            <div class="download-options">
+                <div class="download-card tourist">
+                    <h3>Tourist App</h3>
+                    <p>Stay safe during your travels with real-time alerts and emergency features.</p>
+                    <div class="app-buttons">
+                        <a href="#" class="app-btn">
+                            <i class="fab fa-google-play"></i>
+                            <span>Google Play</span>
+                        </a>
+                        <a href="#" class="app-btn">
+                            <i class="fab fa-apple"></i>
+                            <span>App Store</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="download-card authority">
+                    <h3>Authority Dashboard</h3>
+                    <p>For tourism departments and police to monitor and respond to incidents.</p>
+                    <a href="#" class="btn btn-primary">Request Access</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="verify" class="verify">
+        <div class="container">
+            <div class="section-header">
+                <h2>Verify Digital ID</h2>
+                <p>Scan or upload a KAVACH 360 QR code to verify tourist identity</p>
+            </div>
+            <div class="verify-content">
+                <div class="verify-options">
+                    <div class="verify-card">
+                        <h3>Scan QR Code</h3>
+                        <div class="qr-scanner-container">
+                            <div id="qrScanner" class="qr-scanner">
+                                <div class="scanner-overlay">
+                                    <div class="scanner-frame"></div>
+                                    <div class="scanner-animation"></div>
+                                </div>
+                                <video id="qrVideo" playsinline></video>
+                            </div>
+                            <button id="startScanBtn" class="btn btn-primary">Start Camera</button>
+                        </div>
+                    </div>
+                    <div class="verify-card">
+                        <h3>Upload QR Image</h3>
+                        <div class="qr-upload">
+                            <label for="qrFileInput" class="file-upload-label">
+                                <i class="fas fa-upload"></i>
+                                <span>Choose QR Image</span>
+                            </label>
+                            <input type="file" id="qrFileInput" accept="image/*" class="file-upload-input">
+                            <p class="upload-info">Supported formats: JPG, PNG, GIF</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="verificationResult" class="verification-result">
+                    <div class="result-header">
+                        <h3>Verification Result</h3>
+                    </div>
+                    <div class="result-content">
+                        <div class="result-placeholder">
+                            <i class="fas fa-qrcode"></i>
+                            <p>Scan or upload a QR code to verify tourist identity</p>
+                        </div>
+                        <div class="result-details" style="display: none;">
+                            <div class="result-status">
+                                <div class="status-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="status-text">
+                                    <h4>Verified</h4>
+                                    <p>This is a valid KAVACH 360 Digital ID</p>
+                                </div>
+                            </div>
+                            <div class="tourist-info">
+                                <div class="info-item">
+                                    <span class="info-label">Name:</span>
+                                    <span id="touristName" class="info-value">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">ID Number:</span>
+                                    <span id="touristIdNumber" class="info-value">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Nationality:</span>
+                                    <span id="touristNationality" class="info-value">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Issue Date:</span>
+                                    <span id="idIssueDate" class="info-value">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Expiry Date:</span>
+                                    <span id="idExpiryDate" class="info-value">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">Verification Time:</span>
+                                    <span id="verificationTime" class="info-value">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Us</h2>
+                <p>Get in touch for more information</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Tourism Department, Government of India<br>New Delhi, India</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>info@kavach360.gov.in</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <p>+91 1234567890</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h2>KAVACH 360</h2>
+                    <p>Smart Tourist Safety & Incident Response System</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-link-group">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#home">Home</a></li>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#about">About</a></li>
+                            <li><a href="#download">Download</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-link-group">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">FAQ</a></li>
+                            <li><a href="#">Support</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 KAVACH 360. All rights reserved.</p>
+                <p>A project by the Ministry of Tourism & Ministry of Home Affairs, Government of India</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="script.js"></script>
+<script>
+    // QR Code Verification Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const startScanBtn = document.getElementById('startScanBtn');
+        const qrFileInput = document.getElementById('qrFileInput');
+        const resultPlaceholder = document.querySelector('.result-placeholder');
+        const resultDetails = document.querySelector('.result-details');
+        const touristName = document.getElementById('touristName');
+        const touristIdNumber = document.getElementById('touristIdNumber');
+        const touristNationality = document.getElementById('touristNationality');
+        const idIssueDate = document.getElementById('idIssueDate');
+        const idExpiryDate = document.getElementById('idExpiryDate');
+        const verificationTime = document.getElementById('verificationTime');
+        
+        let html5QrCode;
+        let isScanning = false;
+        
+        // Initialize QR Scanner
+        function initQrScanner() {
+            html5QrCode = new Html5Qrcode("qrScanner");
+        }
+        
+        // Start QR Scanner
+        function startQrScanner() {
+            const qrConfig = { fps: 10, qrbox: 250 };
+            html5QrCode.start(
+                { facingMode: "environment" },
+                qrConfig,
+                onQrCodeSuccess,
+                onQrCodeError
+            ).then(() => {
+                isScanning = true;
+                startScanBtn.textContent = "Stop Camera";
+            }).catch((err) => {
+                console.error("Error starting QR scanner:", err);
+                alert("Could not start camera. Please check permissions.");
+            });
+        }
+        
+        // Stop QR Scanner
+        function stopQrScanner() {
+            if (html5QrCode && isScanning) {
+                html5QrCode.stop().then(() => {
+                    isScanning = false;
+                    startScanBtn.textContent = "Start Camera";
+                }).catch((err) => {
+                    console.error("Error stopping QR scanner:", err);
+                });
+            }
+        }
+        
+        // QR Code Success Handler
+        function onQrCodeSuccess(decodedText) {
+            stopQrScanner();
+            processQrData(decodedText);
+        }
+        
+        // QR Code Error Handler
+        function onQrCodeError(error) {
+            // Just log errors, don't show to user
+            console.error("QR Code scanning error:", error);
+        }
+        
+        // Process QR Data
+        function processQrData(data) {
+            try {
+                // Try to parse as JSON
+                let qrData = JSON.parse(data);
+                
+                // Verify this is a KAVACH 360 QR code
+                if (qrData.app !== "KAVACH360" || !qrData.userId) {
+                    showInvalidQrMessage("Invalid QR Code format");
+                    return;
+                }
+                
+                // Display the data
+                displayTouristData(qrData);
+            } catch (e) {
+                console.error("Error processing QR data:", e);
+                showInvalidQrMessage("Could not read QR code data");
+            }
+        }
+        
+        // Display Tourist Data
+        function displayTouristData(data) {
+            // Hide placeholder, show details
+            resultPlaceholder.style.display = "none";
+            resultDetails.style.display = "block";
+            
+            // Set verification time
+            const now = new Date();
+            verificationTime.textContent = now.toLocaleString();
+            
+            // Set tourist info
+            touristName.textContent = data.name || "Not Available";
+            touristIdNumber.textContent = data.userId || "Not Available";
+            touristNationality.textContent = data.nationality || "Not Available";
+            idIssueDate.textContent = data.issueDate || "Not Available";
+            idExpiryDate.textContent = data.expiryDate || "Not Available";
+            
+            // Check if ID is expired
+            if (data.expiryDate) {
+                const expiry = new Date(data.expiryDate);
+                if (expiry < now) {
+                    // Show expired status
+                    document.querySelector('.status-icon i').className = "fas fa-exclamation-circle";
+                    document.querySelector('.status-icon i').style.color = "var(--warning-color)";
+                    document.querySelector('.status-text h4').textContent = "Expired";
+                    document.querySelector('.status-text h4').style.color = "var(--warning-color)";
+                    document.querySelector('.status-text p').textContent = "This KAVACH 360 Digital ID has expired";
+                    document.querySelector('.result-status').style.backgroundColor = "rgba(255, 193, 7, 0.1)";
+                }
+            }
+        }
+        
+        // Show Invalid QR Message
+        function showInvalidQrMessage(message) {
+            // Hide placeholder, show details
+            resultPlaceholder.style.display = "none";
+            resultDetails.style.display = "block";
+            
+            // Set verification time
+            const now = new Date();
+            verificationTime.textContent = now.toLocaleString();
+            
+            // Clear tourist info
+            touristName.textContent = "-";
+            touristIdNumber.textContent = "-";
+            touristNationality.textContent = "-";
+            idIssueDate.textContent = "-";
+            idExpiryDate.textContent = "-";
+            
+            // Show invalid status
+            document.querySelector('.status-icon i').className = "fas fa-times-circle";
+            document.querySelector('.status-icon i').style.color = "var(--danger-color)";
+            document.querySelector('.status-text h4').textContent = "Invalid";
+            document.querySelector('.status-text h4').style.color = "var(--danger-color)";
+            document.querySelector('.status-text p').textContent = message || "This is not a valid KAVACH 360 Digital ID";
+            document.querySelector('.result-status').style.backgroundColor = "rgba(220, 53, 69, 0.1)";
+        }
+        
+        // Reset Verification Result
+        function resetVerificationResult() {
+            resultPlaceholder.style.display = "flex";
+            resultDetails.style.display = "none";
+        }
+        
+        // File Upload Handler
+        function handleFileUpload(file) {
+            if (!file) return;
+            
+            html5QrCode.scanFile(file, true)
+                .then(decodedText => {
+                    processQrData(decodedText);
+                })
+                .catch(err => {
+                    console.error("Error scanning file:", err);
+                    showInvalidQrMessage("Could not read QR code from image");
+                });
+        }
+        
+        // Initialize
+        initQrScanner();
+        
+        // Event Listeners
+        startScanBtn.addEventListener('click', function() {
+            if (isScanning) {
+                stopQrScanner();
+            } else {
+                resetVerificationResult();
+                startQrScanner();
+            }
+        });
+        
+        qrFileInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                resetVerificationResult();
+                handleFileUpload(e.target.files[0]);
+            }
+        });
+    });
+</script>
+</body>
+</html>

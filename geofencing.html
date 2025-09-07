@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geofencing Management - Tourist Safety System</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    
+    <!-- Leaflet Draw CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
+    
+    <!-- Leaflet Locate CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.css">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --info-color: #3498db;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --border-color: #ddd;
+            --text-color: #333;
+            --text-light: #666;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-color: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            color: var(--dark-color);
+            margin: 0;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            width: 350px;
+            background-color: #fff;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: width 0.3s ease;
+            z-index: 900;
+        }
+        
+        .sidebar.collapsed {
+            width: 0;
+        }
+        
+        .sidebar-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Filter Form */
+        .filter-form {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        /* Geofence List */
+        .geofence-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .geofence-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .geofence-list-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+        
+        .geofence-list-item.active {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .geofence-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .geofence-info {
+            flex: 1;
+        }
+        
+        .geofence-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .geofence-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .geofence-type {
+            color: var(--text-light);
+        }
+        
+        .empty-list-message {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        /* Map Container */
+        .map-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #geofenceMap {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Map Controls */
+        .map-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 800;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Details Panel */
+        .details-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 350px;
+            max-height: calc(100% - 20px);
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            z-index: 800;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .details-header {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .details-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .details-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .details-content {
+            padding: 15px;
+        }
+        
+        .details-section {
+            margin-bottom: 20px;
+        }
+        
+        .details-section h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+        
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .details-item {
+            padding: 5px 0;
+        }
+        
+        .details-item.full-width {
+            grid-column: span 2;
+        }
+        
+        .details-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            color: var(--text-light);
+        }
+        
+        .details-value {
+            font-size: 0.95rem;
+        }
+        
+        .details-header-with-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .details-header-with-actions h4 {
+            margin: 0;
+            border: none;
+            padding: 0;
+        }
+        
+        /* Tourist List */
+        .tourists-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+        
+        .tourist-list-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tourist-list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .tourist-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .tourist-info {
+            flex: 1;
+        }
+        
+        .tourist-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .tourist-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .tourist-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        /* Alert Options */
+        .alert-options {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .alert-options.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        /* Toggle Switch */
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .toggle-switch input {
+            display: none;
+        }
+        
+        .toggle-slider {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-slider:before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #fff;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: var(--secondary-color);
+        }
+        
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        .toggle-label {
+            font-weight: 500;
+        }
+        
+        /* Geofence Form */
+        .form-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .form-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            max-width: 90%;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .form-header {
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .form-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .form-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .form-footer {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-active {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #27ae60;
+        }
+        
+        .status-inactive {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+        
+        .status-warning {
+            background-color: rgba(243, 156, 18, 0.2);
+            color: #d35400;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-light {
+            background-color: #f8f9fa;
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        .btn-light:hover {
+            background-color: #e9ecef;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        
+        .btn-icon {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            background-color: transparent;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-icon:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-color);
+        }
+        
+        .btn-toggle-sidebar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 850;
+            width: 36px;
+            height: 36px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-map-control {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-map-control:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .btn-map-control.active {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .btn-map-control.active i {
+            color: #fff;
+        }
+        
+        /* Popup Styles */
+        .geofence-popup {
+            min-width: 200px;
+        }
+        
+        .geofence-popup h4 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+        
+        .geofence-popup p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        .popup-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .btn-popup {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            flex: 1;
+        }
+        
+        .btn-edit {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+        
+        .btn-view {
+            background-color: var(--light-color);
+            color: var(--text-color);
+        }
+        
+        /* Tourist Marker */
+        .tourist-marker {
+            background: none;
+            border: none;
+        }
+        
+        .tourist-marker-icon {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .marker-updated {
+            animation: pulse 2s;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7);
+            }
+            70% {
+                transform: scale(1.2);
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0);
+            }
+        }
+        
+        /* Tourist Popup */
+        .tourist-popup {
+            min-width: 200px;
+        }
+        
+        .tourist-popup h4 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+        }
+        
+        .tourist-popup-details {
+            margin-bottom: 10px;
+        }
+        
+        .tourist-popup-details p {
+            margin: 5px 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Alerts Container */
+        #alertsContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 350px;
+        }
+        
+        .geofence-alert {
+            display: flex;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .geofence-alert.alert-hiding {
+            animation: slideOut 0.3s ease forwards;
+        }
+        
+        .alert-icon {
+            width: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .alert-entry .alert-icon {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+        
+        .alert-exit .alert-icon {
+            background-color: var(--warning-color);
+            color: #fff;
+        }
+        
+        .alert-content {
+            padding: 10px;
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .alert-message {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .alert-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .alert-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            align-self: flex-start;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .loading-spinner i {
+            margin-right: 10px;
+        }
+        
+        /* Error Message */
+        .error-message {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            color: var(--danger-color);
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: 5px;
+        }
+        
+        .error-message i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: var(--shadow);
+            padding: 0;
+            max-width: 350px;
+            z-index: 1100;
+            animation: slideIn 0.3s ease;
+        }
+        
+        .notification.notification-hiding {
+            animation: slideOut 0.3s ease forwards;
+        }
+        
+        .notification-icon {
+            width: 50px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .notification-success .notification-icon {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+        
+        .notification-error .notification-icon {
+            background-color: var(--danger-color);
+            color: #fff;
+        }
+        
+        .notification-warning .notification-icon {
+            background-color: var(--warning-color);
+            color: #fff;
+        }
+        
+        .notification-info .notification-icon {
+            background-color: var(--info-color);
+            color: #fff;
+        }
+        
+        .notification-content {
+            padding: 15px;
+            flex: 1;
+        }
+        
+        .notification-message {
+            font-size: 0.95rem;
+        }
+        
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px 10px;
+            align-self: flex-start;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 280px;
+            }
+            
+            .details-panel {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <img src="/logo.png" alt="Tourist Safety System Logo">
+                <h1>Tourist Safety System</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-light" id="helpButton">
+                    <i class="fas fa-question-circle"></i> Help
+                </button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-user"></i> Admin
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2>Geofence Management</h2>
+                </div>
+                <div class="sidebar-content">
+                    <!-- Actions Section -->
+                    <div class="sidebar-section">
+                        <button class="btn btn-primary" id="newGeofence">
+                            <i class="fas fa-plus"></i> Create New Geofence
+                        </button>
+                    </div>
+                    
+                    <!-- Filter Section -->
+                    <div class="sidebar-section">
+                        <h3>Filter Geofences</h3>
+                        <form class="filter-form" id="geofenceFilterForm">
+                            <div class="form-group">
+                                <label for="filterName">Name</label>
+                                <input type="text" id="filterName" placeholder="Search by name...">
+                            </div>
+                            <div class="form-group">
+                                <label for="filterType">Type</label>
+                                <select id="filterType">
+                                    <option value="">All Types</option>
+                                    <option value="circle">Circle</option>
+                                    <option value="polygon">Polygon</option>
+                                    <option value="rectangle">Rectangle</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="filterStatus">Status</label>
+                                <select id="filterStatus">
+                                    <option value="">All Statuses</option>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="warning">Warning</option>
+                                </select>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-light" id="resetFilter">
+                                    <i class="fas fa-undo"></i> Reset
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-filter"></i> Apply Filter
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Geofence List Section -->
+                    <div class="sidebar-section">
+                        <h3>Geofence List</h3>
+                        <div class="geofence-list" id="geofenceList">
+                            <!-- Geofence list items will be added here dynamically -->
+                            <div class="empty-list-message">
+                                No geofences found. Create one by using the drawing tools.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Map Container -->
+            <div class="map-container">
+                <div id="geofenceMap"></div>
+                
+                <!-- Toggle Sidebar Button -->
+                <button class="btn-toggle-sidebar" id="toggleSidebar">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Map Controls -->
+                <div class="map-controls">
+                    <button class="btn-map-control" id="toggleTourists">
+                        <i class="fas fa-user"></i>
+                        <span>Show Tourists</span>
+                    </button>
+                </div>
+                
+                <!-- Geofence Details Panel -->
+                <div class="details-panel" id="geofenceDetails">
+                    <!-- Details content will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Geofence Form Overlay -->
+    <div class="form-overlay" id="geofenceFormContainer">
+        <div class="form-container">
+            <div class="form-header">
+                <h3 id="geofenceFormTitle">Create New Geofence</h3>
+            </div>
+            <form id="geofenceForm">
+                <div class="form-body">
+                    <div class="form-group">
+                        <label for="geofenceName">Name *</label>
+                        <input type="text" id="geofenceName" required placeholder="Enter geofence name">
+                    </div>
+                    <div class="form-group">
+                        <label for="geofenceType">Type</label>
+                        <select id="geofenceType">
+                            <option value="circle">Circle</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="rectangle">Rectangle</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="radiusContainer">
+                        <label for="geofenceRadius">Radius (meters) *</label>
+                        <input type="number" id="geofenceRadius" min="1" placeholder="Enter radius in meters">
+                    </div>
+                    <div class="form-group">
+                        <label for="geofenceDescription">Description</label>
+                        <textarea id="geofenceDescription" placeholder="Enter description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="geofenceStatus">Status</label>
+                        <select id="geofenceStatus">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="warning">Warning</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="geofenceColor">Color</label>
+                        <input type="color" id="geofenceColor" value="#3388ff">
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button type="button" class="btn btn-light" id="cancelGeofence">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Geofence</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Alerts Container -->
+    <div id="alertsContainer"></div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    
+    <!-- Leaflet Draw JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    
+    <!-- Leaflet Locate JS -->
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.locatecontrol/dist/L.Control.Locate.min.js"></script>
+    
+    <!-- Leaflet Geometry Util JS -->
+    <script src="https://unpkg.com/leaflet-geometryutil@0.9.3/src/leaflet.geometryutil.js"></script>
+    
+    <!-- Socket.IO JS -->
+    <script src="/socket.io/socket.io.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="/geofencing.js"></script>
+</body>
+</html>

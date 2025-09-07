@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KAVACH 360 - Smart Tourist Safety Monitoring & Incident Response System using AI, Blockchain, and Geo-Fencing technologies">
+    <meta name="keywords" content="tourist safety, blockchain ID, geo-fencing, AI detection, tourism security">
+    <title>KAVACH 360 - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            /* Color Variables */
+            --primary-color: #4361ee;
+            --primary-light: #4895ef;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #00C853;
+            --warning-color: #FF9800;
+            --danger-color: #F44336;
+            --dark-color: #212121;
+            --light-color: #f8f9fa;
+            --gray-color: #6c757d;
+            --gray-light: #e9ecef;
+            
+            /* Layout Variables */
+            --border-radius: 10px;
+            --card-border-radius: 15px;
+            --transition-speed: 0.3s;
+            
+            /* Shadow Variables */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary-light), var(--secondary-color));
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .tagline {
+            font-size: 12px;
+            color: var(--gray-color);
+            margin: 0;
+        }
+        
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        .nav-list a {
+            color: var(--dark-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color var(--transition-speed);
+        }
+        
+        .nav-list a:hover {
+            color: var(--primary-color);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .mobile-menu-btn span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--dark-color);
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        
+        main {
+            padding-top: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            border-radius: var(--card-border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            background-color: white;
+            margin: 40px auto;
+        }
+        
+        .login-banner {
+            flex: 1;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .login-banner h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .login-banner p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            max-width: 400px;
+        }
+        
+        .login-features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .feature i {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .login-form-container {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: var(--gray-color);
+            font-size: 14px;
+        }
+        
+        .demo-login {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: var(--gray-light);
+            border-radius: var(--border-radius);
+            color: var(--gray-color);
+            font-size: 13px;
+        }
+        
+        .alert {
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
+            display: none;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--gray-light);
+            border-radius: var(--border-radius);
+            font-family: inherit;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary-light);
+            outline: none;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        
+        .login-form button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .login-form button:disabled {
+            background-color: var(--gray-color);
+            cursor: not-allowed;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        .login-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 600px;
+            }
+            
+            .login-banner {
+                padding: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-list {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav.active .nav-list {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: white;
+                box-shadow: var(--shadow-md);
+                padding: 20px;
+            }
+            
+            .login-banner h1 {
+                font-size: 24px;
+            }
+            
+            .login-features {
+                gap: 10px;
+            }
+            
+            .feature {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>KAVACH 360</h1>
+                <p class="tagline">Smart Tourist Safety & Incident Response System</p>
+            </div>
+            <nav class="nav" aria-label="Main navigation">
+                <ul class="nav-list">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#download">Download</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+                <button class="mobile-menu-btn" aria-label="Toggle menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="login-container">
+                <div class="login-banner">
+                    <h1>Welcome to Kavach360</h1>
+                    <p>Your comprehensive tourist safety platform powered by AI, Blockchain, and Geo-Fencing technologies</p>
+                    
+                    <div class="login-features">
+                        <div class="feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Blockchain Digital ID</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Smart Geo-Fencing</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>Emergency SOS</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-bell"></i>
+                            <span>Real-time Alerts</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="login-form-container">
+                    <div class="login-header">
+                        <h2>Login to Your Account</h2>
+                        <p>Access your tourist safety dashboard</p>
+                        <p class="demo-login"><small>Demo login: username: <strong>demo</strong>, password: <strong>password123</strong></small></p>
+                    </div>
+                    
+                    <div id="login-alert" class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="login-alert-text">Invalid username or password.</span>
+                        <button id="retry-connection" class="btn btn-outline btn-sm" style="margin-left: 10px; display: none;">
+                            <i class="fas fa-redo"></i> Retry Connection
+                        </button>
+                    </div>
+                    <div id="login-success" class="alert alert-success"></div>
+                    
+                    <form class="login-form" id="login-form" method="POST" action="javascript:void(0);">
+                        <div class="form-group">
+                            <label for="username">Username or Email</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" id="login-button">Login</button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Don't have an account? <a href="register.html">Register here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const loginAlert = document.getElementById('login-alert');
+            const loginSuccess = document.getElementById('login-success');
+            const loginButton = document.getElementById('login-button');
+            
+            // Function to test server connection with retry
+            async function testServerConnection(retries = 3, delay = 1000) {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        console.log(`Testing server connection (attempt ${i + 1}/${retries})...`);
+                        
+                        // Create a timeout promise
+                        const timeoutPromise = new Promise((_, reject) => {
+                            setTimeout(() => reject(new Error('Request timeout')), 5000);
+                        });
+                        
+                        // Create the fetch promise
+                        const fetchPromise = fetch('http://localhost:3000/api/test', {
+                            credentials: 'include',
+                            mode: 'cors'
+                        });
+                        
+                        // Race between fetch and timeout
+                        const response = await Promise.race([fetchPromise, timeoutPromise]);
+                        
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        console.log('Test endpoint response:', data);
+                        console.log('Server connection successful!');
+                        
+                        // Hide any existing error messages
+                        loginAlert.style.display = 'none';
+                        return true;
+                    } catch (error) {
+                        console.error(`Server test attempt ${i + 1} failed:`, error);
+                        
+                        if (i === retries - 1) {
+                            // Last attempt failed
+                            const alertText = document.getElementById('login-alert-text');
+                            const retryButton = document.getElementById('retry-connection');
+                            alertText.textContent = 'Connection error: Unable to reach the server. Please check if the server is running.';
+                            retryButton.style.display = 'inline-block';
+                            loginAlert.style.display = 'block';
+                            return false;
+                        } else {
+                            // Wait before retrying
+                            await new Promise(resolve => setTimeout(resolve, delay));
+                        }
+                    }
+                }
+                return false;
+            }
+            
+            // Test server connection on page load
+            testServerConnection();
+            
+            // Add retry button event listener
+            document.getElementById('retry-connection').addEventListener('click', function() {
+                this.style.display = 'none';
+                testServerConnection();
+            });
+
+            // Function to handle login submission
+            async function handleLoginSubmit(e) {
+                if (e) e.preventDefault();
+                console.log('Login form submit event triggered');
+                
+                // Get form values
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                console.log('Form values captured:', { username, password: '***' });
+                
+                // Basic validation
+                if (!username || !password) {
+                    loginAlert.textContent = 'Please fill in all fields.';
+                    loginAlert.style.display = 'block';
+                    return;
+                }
+                
+                // Test server connection first
+                const serverConnected = await testServerConnection(1, 500);
+                if (!serverConnected) {
+                    return; // Error message already shown by testServerConnection
+                }
+                
+                // Hide any previous alerts
+                loginAlert.style.display = 'none';
+                loginSuccess.style.display = 'none';
+                
+                // Disable the login button to prevent double submission
+                loginButton.disabled = true;
+                loginButton.textContent = 'Logging in...';
+                
+                // Call the login API using fetch
+                console.log('Attempting login with:', { username });
+                console.log('Sending POST request to login API with:', JSON.stringify({ username, password }));
+                
+                fetch('http://localhost:3000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include', // Important for cookies
+                    body: JSON.stringify({ username, password }),
+                    mode: 'cors' // Explicitly set CORS mode
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    
+                    if (!response.ok) {
+                        // Try to parse error response
+                        return response.json().then(errorData => {
+                            throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
+                        }).catch(() => {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login response:', data);
+                    
+                    if (data.status === 'success' && data.data && data.data.token) {
+                        // Store token in localStorage as backup
+                        // The server also sets it as an HTTP-only cookie
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('user', JSON.stringify(data.data.user));
+                        
+                        // Show success message
+                        loginSuccess.textContent = 'Login successful! Redirecting to dashboard...';
+                        loginSuccess.style.display = 'block';
+                        
+                        // Redirect to dashboard after 1.5 seconds
+                        setTimeout(() => {
+                            window.location.href = 'dashboard.html';
+                        }, 1500);
+                    } else {
+                        // Show error message
+                        loginAlert.textContent = data.message || 'Login failed. Please check your credentials.';
+                        loginAlert.style.display = 'block';
+                        
+                        // Re-enable the login button
+                        loginButton.disabled = false;
+                        loginButton.textContent = 'Login';
+                    }
+                })
+                .catch(error => {
+                    console.error('Login error:', error);
+                    loginAlert.textContent = 'Connection error: Unable to reach the server. Please check if the server is running.';
+                    loginAlert.style.display = 'block';
+                    
+                    // Re-enable the login button
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Login';
+                });
+            }
+            
+            // Add event listeners
+            loginForm.addEventListener('submit', handleLoginSubmit);
+            
+            // Add a direct click handler to the button as well
+            loginButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Login button clicked directly');
+                handleLoginSubmit();
+            });
+        });
+    </script>
+</body>
+</html>
