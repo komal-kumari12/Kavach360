@@ -37,11 +37,15 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+
 }
 
 section {
     padding: 80px 0;
+}
+
+span{
+    color: #166088;
 }
 
 /* Typography */
@@ -88,6 +92,7 @@ img {
     height: auto;
 }
 
+
 /* Buttons */
 .btn {
     display: inline-block;
@@ -112,7 +117,7 @@ img {
 }
 
 .btn-primary:hover, .btn-primary:focus {
-    background-color: var(--primary-dark);
+    background-color:#1c2d6a;
     color: var(--text-white);
     transform: translateY(-3px);
     box-shadow: var(--shadow);
@@ -125,7 +130,7 @@ img {
 }
 
 .btn-secondary:hover, .btn-secondary:focus {
-    background-color: var(--primary-color);
+    background-color: #1c2d6a;
     color: var(--text-white);
     transform: translateY(-3px);
     box-shadow: var(--shadow);
@@ -301,7 +306,7 @@ img {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 50%;  
     transform: translateX(-50%);
     width: 50px;
     height: 3px;
@@ -315,7 +320,7 @@ img {
 }
 
 .feature-card {
-    background-color: #fff;
+    background-color: rgba(247, 247, 241, 0.205);
     border-radius: 10px;
     padding: 30px;
     box-shadow: var(--shadow);
@@ -400,20 +405,25 @@ img {
     font-weight: 500;
 }
 
+.tech-badge:nth-child(1) {
+    background-color: rgb(192, 142, 50);
+}
+
+
 .tech-badge:nth-child(2) {
-    background-color: var(--secondary-color);
+    background-color: rgb(28, 28, 157);
 }
 
 .tech-badge:nth-child(3) {
-    background-color: var(--accent-color);
+    background-color: green;
 }
 
 .tech-badge:nth-child(4) {
-    background-color: var(--dark-color);
+    background-color: indigo;
 }
 
 .tech-badge:nth-child(5) {
-    background-color: #9c27b0;
+    background-color: #b71818;
 }
 
 /* How It Works Section */
@@ -624,13 +634,13 @@ img {
 .footer {
     background-color: var(--dark-color);
     color: var(--text-white);
-    padding: 70px 0 20px;
+    padding: 50px 0 20px;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 }
 
 .footer-logo h2 {
@@ -644,13 +654,13 @@ img {
 
 .footer-links {
     display: flex;
-    gap: 50px;
+    gap:70px;
 }
 
 .footer-link-group h3 {
     color: var(--text-white);
     margin-bottom: 20px;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
 }
 
 .footer-link-group ul li {
@@ -668,13 +678,13 @@ img {
 
 .footer-bottom {
     text-align: center;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-bottom p {
     color: rgba(255, 255, 255, 0.7);
-    margin-bottom: 10px;
+    margin-bottom: 0.5px;
 }
 
 /* Responsive Styles */

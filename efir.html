@@ -1,838 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-FIR Generator | Kavach 360</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-    <style>
-        :root {
-            --primary-color: #1e40af;
-            --secondary-color: #3b82f6;
-            --accent-color: #60a5fa;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --light-color: #f3f4f6;
-            --dark-color: #1f2937;
-            --border-color: #e5e7eb;
-            --text-color: #374151;
-            --text-light: #6b7280;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: #f9fafb;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 50px;
-            margin-right: 15px;
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin: 0;
-        }
-
-        .page-title {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .page-title h2 {
-            font-size: 2rem;
-            color: var(--dark-color);
-            margin-bottom: 10px;
-        }
-
-        .page-title p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-        }
-
-        .card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .card-header .icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-size: 1.2rem;
-        }
-
-        .card-header h3 {
-            font-size: 1.4rem;
-            color: var(--dark-color);
-            margin: 0;
-        }
-
-        .form-section {
-            margin-bottom: 30px;
-        }
-
-        .form-section.disabled {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .form-section h4 {
-            font-size: 1.2rem;
-            color: var(--dark-color);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-row {
-            display: flex;
-            flex-wrap: wrap;
-            margin: 0 -10px;
-        }
-
-        .form-col {
-            flex: 1;
-            padding: 0 10px;
-            min-width: 200px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 10px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: 1rem;
-            color: var(--text-color);
-            background-color: white;
-            transition: border-color 0.3s;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            text-align: center;
-        }
-
-        .btn:hover {
-            background-color: #1c3879;
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
-        }
-
-        .btn-secondary:hover {
-            background-color: #2563eb;
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 1px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-        }
-
-        .btn-success:hover {
-            background-color: #059669;
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-        }
-
-        .btn-danger:hover {
-            background-color: #dc2626;
-        }
-
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-group .btn {
-            flex: 1;
-        }
-
-        .btn i {
-            margin-right: 8px;
-        }
-
-        .btn:disabled {
-            background-color: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Tourist Search Styles */
-        .search-container {
-            position: relative;
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background-color: white;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            box-shadow: var(--shadow);
-            max-height: 300px;
-            overflow-y: auto;
-            z-index: 10;
-            display: none;
-        }
-
-        .search-result-item {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border-color);
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .search-result-item:last-child {
-            border-bottom: none;
-        }
-
-        .search-result-item:hover {
-            background-color: var(--light-color);
-        }
-
-        .tourist-name {
-            font-weight: 500;
-            color: var(--dark-color);
-            margin-bottom: 4px;
-        }
-
-        .tourist-details {
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        .no-results {
-            padding: 15px;
-            text-align: center;
-            color: var(--text-light);
-        }
-
-        /* Selected Tourist Card */
-        .selected-tourist-card {
-            background-color: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .tourist-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .tourist-header h3 {
-            font-size: 1.2rem;
-            margin: 0;
-        }
-
-        .digital-id-badge {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .tourist-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        .detail-item {
-            margin-bottom: 10px;
-        }
-
-        .detail-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 4px;
-        }
-
-        .detail-value {
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-
-        .btn-remove {
-            background-color: transparent;
-            border: none;
-            color: var(--danger-color);
-            font-size: 0.9rem;
-            cursor: pointer;
-            padding: 5px 0;
-            margin-top: 10px;
-            display: inline-block;
-        }
-
-        .btn-remove:hover {
-            text-decoration: underline;
-        }
-
-        /* Location Card */
-        .location-card {
-            background-color: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-
-        .location-card h4 {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .location-details {
-            margin-bottom: 15px;
-        }
-
-        .location-coordinates, .location-time {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            font-size: 0.95rem;
-        }
-
-        .location-coordinates i, .location-time i {
-            color: var(--primary-color);
-            margin-right: 8px;
-            width: 16px;
-        }
-
-        .location-map {
-            height: 200px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-
-        .location-unknown, .location-error {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .location-unknown p, .location-error p {
-            color: var(--text-light);
-        }
-
-        .location-error p {
-            color: var(--danger-color);
-        }
-
-        /* E-FIR Preview Styles */
-        .preview-container {
-            background-color: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .preview-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .preview-title {
-            font-size: 1.3rem;
-            color: var(--dark-color);
-        }
-
-        .efir-preview-container {
-            background-color: white;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .efir-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .efir-logo {
-            width: 80px;
-        }
-
-        .efir-logo img {
-            width: 100%;
-            height: auto;
-        }
-
-        .efir-title {
-            text-align: center;
-            flex-grow: 1;
-        }
-
-        .efir-title h2 {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-
-        .efir-title h3 {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            font-weight: 500;
-        }
-
-        .efir-id {
-            text-align: right;
-            font-size: 0.9rem;
-        }
-
-        .efir-number {
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .efir-section {
-            margin-bottom: 25px;
-        }
-
-        .efir-section h4 {
-            font-size: 1.1rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .efir-details-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .efir-detail-item {
-            margin-bottom: 10px;
-        }
-
-        .efir-detail-item.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .efir-detail-label {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 4px;
-        }
-
-        .efir-detail-value {
-            font-weight: 500;
-            color: var(--dark-color);
-        }
-
-        .efir-detail-value.description {
-            white-space: pre-line;
-            font-weight: normal;
-            line-height: 1.5;
-        }
-
-        .efir-map-container {
-            height: 200px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .efir-location-details {
-            font-size: 0.9rem;
-            color: var(--text-color);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-pending {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .status-approved {
-            background-color: #d1fae5;
-            color: #065f46;
-        }
-
-        .status-rejected {
-            background-color: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .efir-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .efir-verification {
-            font-size: 0.9rem;
-        }
-
-        .verification-text {
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-
-        .verification-url {
-            font-weight: 500;
-            color: var(--primary-color);
-        }
-
-        .efir-qrcode {
-            width: 100px;
-            height: 100px;
-        }
-
-        /* Notification Styles */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            padding: 15px;
-            z-index: 1000;
-            max-width: 350px;
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        .notification-hiding {
-            animation: slideOut 0.3s ease-in forwards;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-
-        .notification-icon {
-            margin-right: 15px;
-            font-size: 1.5rem;
-        }
-
-        .notification-success .notification-icon {
-            color: var(--success-color);
-        }
-
-        .notification-error .notification-icon {
-            color: var(--danger-color);
-        }
-
-        .notification-warning .notification-icon {
-            color: var(--warning-color);
-        }
-
-        .notification-info .notification-icon {
-            color: var(--secondary-color);
-        }
-
-        .notification-content {
-            flex-grow: 1;
-        }
-
-        .notification-message {
-            font-size: 0.95rem;
-            color: var(--text-color);
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: var(--text-light);
-            font-size: 1.2rem;
-            cursor: pointer;
-            margin-left: 10px;
-            padding: 0;
-        }
-
-        .notification-close:hover {
-            color: var(--text-color);
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .form-row {
-                flex-direction: column;
-            }
-
-            .form-col {
-                padding: 0;
-                margin-bottom: 20px;
-            }
-
-            .efir-header {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .efir-logo {
-                margin-bottom: 15px;
-            }
-
-            .efir-id {
-                text-align: center;
-                margin-top: 15px;
-            }
-
-            .efir-footer {
-                flex-direction: column;
-            }
-
-            .efir-verification {
-                text-align: center;
-                margin-bottom: 15px;
-            }
-
-            .efir-qrcode {
-                margin: 0 auto;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KAVACH 360 - E-FIR Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {font-family: Arial, sans-serif; background: #f7f9fc; color: #333;}
+
+    /* Navbar */
+    header {background: #fff; padding: 1rem 2rem; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000;}
+    .container {display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: auto;}
+    .logo h1 {font-size: 1.5rem; color: #1e3a8a;}
+    .tagline {font-size: 0.8rem; color: #555;}
+
+    nav {display: flex; align-items: center; gap: 1rem;}
+    nav a {text-decoration: none; padding: 0.5rem 1rem; border: 1px solid #1e3a8a; border-radius: 6px; color: #1e3a8a; font-weight: 500; transition: 0.3s;}
+    nav a:hover {background: #1e3a8a; color: #fff;}
+
+    .mobile-menu-btn {display: none; flex-direction: column; cursor: pointer; border: none; background: none; gap: 5px;}
+    .mobile-menu-btn span {display: block; width: 25px; height: 3px; background: #333; border-radius: 5px;}
+
+    /* Page Title */
+    .page-title {text-align: center; margin: 2rem 0;}
+    .page-title h2 {font-size: 2rem; color: #1e3a8a;}
+    .page-title p {color: #555; margin-top: 0.5rem;}
+
+    /* Main Section */
+    main {max-width: 900px; margin: auto; padding: 1rem;}
+    .card {background: #fff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 2rem;}
+    .card-header {display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;}
+    .card-header .icon {font-size: 2rem; color: #1e3a8a;}
+    .card-header h3 {font-size: 1.5rem; color: #333;}
+
+    /* Form styling */
+    .form-section {margin-bottom: 1.5rem;}
+    .form-section h4 {margin-bottom: 0.8rem; color: #1e3a8a;}
+    .form-group {margin-bottom: 1rem;}
+    label {display: block; margin-bottom: 0.5rem; font-weight: bold;}
+    input, select, textarea {width: 100%; padding: 0.6rem; border: 1px solid #ccc; border-radius: 6px;}
+    textarea {resize: vertical; min-height: 100px;}
+
+    .form-row {display: flex; gap: 1rem;}
+    .form-col {flex: 1;}
+
+    .btn {padding: 0.6rem 1rem; border: none; border-radius: 6px; cursor: pointer;}
+    .btn-outline {border: 1px solid #1e3a8a; background: none; color: #1e3a8a;}
+    .btn-outline:hover {background: #1e3a8a; color: #fff;}
+    .btn-success {background: #16a34a; color: #fff;}
+    .btn-secondary {background: #6b7280; color: #fff;}
+    .btn-group {display: flex; gap: 1rem;}
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav {display: none; flex-direction: column; gap: 1rem; margin-top: 1rem;}
+      nav.active {display: flex;}
+      .mobile-menu-btn {display: flex;}
+      .form-row {flex-direction: column;}
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Navbar -->
+  <header class="header">
     <div class="container">
-        <header>
-            <div class="logo">
-                <img src="/images/logo.png" alt="Kavach 360 Logo" onerror="this.src='/favicon.ico'; this.onerror=null;">
-                <h1>Kavach 360</h1>
-            </div>
-            <nav>
-                <a href="/dashboard" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
-            </nav>
-        </header>
-
-        <div class="page-title">
-            <h2>E-FIR Generator</h2>
-            <p>Generate electronic First Information Reports for missing tourists</p>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <div class="icon">
-                    <i class="fas fa-file-alt"></i>
-                </div>
-                <h3>Create New E-FIR</h3>
-            </div>
-
-            <form id="efirForm">
-                <input type="hidden" id="touristId" name="touristId">
-
-                <div class="form-section">
-                    <h4>1. Tourist Information</h4>
-                    <div class="form-group">
-                        <label for="touristSearch">Search Tourist</label>
-                        <div class="search-container">
-                            <input type="text" id="touristSearch" placeholder="Search by name, digital ID, or passport number...">
-                            <div id="searchResults" class="search-results"></div>
-                        </div>
-                    </div>
-
-                    <div id="selectedTourist" style="display: none;"></div>
-                    <div id="lastKnownLocation"></div>
-                </div>
-
-                <div class="form-section disabled">
-                    <h4>2. Incident Details</h4>
-                    <div class="form-row">
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="incidentDate">Date of Disappearance</label>
-                                <input type="date" id="incidentDate" name="incidentDate">
-                            </div>
-                        </div>
-                        <div class="form-col">
-                            <div class="form-group">
-                                <label for="incidentTime">Time of Disappearance (if known)</label>
-                                <input type="time" id="incidentTime" name="incidentTime">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="incidentLocation">Last Known Location</label>
-                        <input type="text" id="incidentLocation" name="incidentLocation" placeholder="Enter the last known location...">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="incidentDescription">Description of Incident</label>
-                        <textarea id="incidentDescription" name="incidentDescription" placeholder="Provide details about the disappearance, including circumstances, what the person was wearing, who they were with, etc."></textarea>
-                    </div>
-                </div>
-
-                <div class="form-section disabled">
-                    <h4>3. Template Selection</h4>
-                    <div class="form-group">
-                        <label for="templateSelector">Select Template (Optional)</label>
-                        <select id="templateSelector" name="templateId">
-                            <option value="">-- Select a template --</option>
-                            <option value="template1">Standard Missing Person</option>
-                            <option value="template2">Tourist in Restricted Area</option>
-                            <option value="template3">Medical Emergency</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-section disabled">
-                    <h4>4. Preview & Submit</h4>
-                    <div class="form-group">
-                        <button type="button" id="previewBtn" class="btn btn-secondary"><i class="fas fa-eye"></i> Generate Preview</button>
-                    </div>
-
-                    <div id="efirPreview" class="preview-container" style="display: none;"></div>
-
-                    <div class="btn-group" style="margin-top: 20px;">
-                        <button type="button" id="downloadEFIR" class="btn btn-outline"><i class="fas fa-download"></i> Download PDF</button>
-                        <button type="button" id="submitEFIR" class="btn btn-success"><i class="fas fa-paper-plane"></i> Submit E-FIR</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+      <div class="logo">
+        <h1>KAVACH 360</h1>
+        <p class="tagline">Smart Tourist Safety & Incident Response System</p>
+      </div>
+      <nav id="navMenu">
+        <a href="/dashboard.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <a href="#">Home</a>
+        <a href="#">Reports</a>
+        <a href="#">Contact</a>
+      </nav>
+      <button class="mobile-menu-btn" id="menuBtn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     </div>
+  </header>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="/efir-generator.js"></script>
+  <!-- Page Title -->
+  <div class="page-title">
+    <h2>E-FIR Generator</h2>
+    <p>Generate electronic First Information Reports for missing tourists</p>
+  </div>
+
+  <!-- Main Section -->
+  <main>
+    <div class="card">
+      <div class="card-header">
+        <div class="icon">
+          <i class="fas fa-file-alt"></i>
+        </div>
+        <h3>Create New E-FIR</h3>
+      </div>
+
+      <!-- E-FIR Form -->
+      <form id="efirForm">
+        <input type="hidden" id="touristId" name="touristId">
+
+        <!-- Tourist Info -->
+        <div class="form-section">
+          <h4>1. Tourist Information</h4>
+          <div class="form-group">
+            <label for="touristSearch">Search Tourist</label>
+            <input type="text" id="touristSearch" placeholder="Search by name, digital ID, or passport number...">
+          </div>
+        </div>
+
+        <!-- Incident Details -->
+        <div class="form-section">
+          <h4>2. Incident Details</h4>
+          <div class="form-row">
+            <div class="form-col">
+              <div class="form-group">
+                <label for="incidentDate">Date of Disappearance</label>
+                <input type="date" id="incidentDate" name="incidentDate">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="form-group">
+                <label for="incidentTime">Time of Disappearance (if known)</label>
+                <input type="time" id="incidentTime" name="incidentTime">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="incidentLocation">Last Known Location</label>
+            <input type="text" id="incidentLocation" name="incidentLocation" placeholder="Enter the last known location...">
+          </div>
+
+          <div class="form-group">
+            <label for="incidentDescription">Description of Incident</label>
+            <textarea id="incidentDescription" name="incidentDescription" placeholder="Provide details..."></textarea>
+          </div>
+        </div>
+
+        <!-- Template Selection -->
+        <div class="form-section">
+          <h4>3. Template Selection</h4>
+          <div class="form-group">
+            <label for="templateSelector">Select Template (Optional)</label>
+            <select id="templateSelector" name="templateId">
+              <option value="">-- Select a template --</option>
+              <option value="template1">Standard Missing Person</option>
+              <option value="template2">Tourist in Restricted Area</option>
+              <option value="template3">Medical Emergency</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Preview & Submit -->
+        <div class="form-section">
+          <h4>4. Preview & Submit</h4>
+          <div class="form-group">
+            <button type="button" id="previewBtn" class="btn btn-secondary"><i class="fas fa-eye"></i> Generate Preview</button>
+          </div>
+
+          <div class="btn-group">
+            <button type="button" id="downloadEFIR" class="btn btn-outline"><i class="fas fa-download"></i> Download PDF</button>
+            <button type="button" id="submitEFIR" class="btn btn-success"><i class="fas fa-paper-plane"></i> Submit E-FIR</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Toggle mobile menu
+    const menuBtn = document.getElementById("menuBtn");
+    const navMenu = document.getElementById("navMenu");
+    menuBtn.addEventListener("click", () => {
+      navMenu.classList.toggle("active");
+    });
+  </script>
+
 </body>
 </html>

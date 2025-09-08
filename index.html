@@ -243,15 +243,36 @@
         font-weight: 500;
         color: var(--dark-color);
     }
+
+    .logo {
+  display: flex;
+  align-items: center;
+   /* space between logo and text */
+}
+
+.logo-img {
+  width: 160px;   /* adjust as per your design */
+  height: 100px;
+  object-fit: contain;
+}
+
+
     </style>
 </head>
 <body>
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>KAVACH 360</h1>
-                <p class="tagline">Smart Tourist Safety & Incident Response System</p>
-            </div>
+                <img src="SAVE_20250908_125903-removebg-preview.png" alt="Kavach 360 Logo" class="logo-img">
+                <div>
+                  <h1>KAVACH 360</h1>
+                  <p class="tagline">Smart Tourist Safety & Incident Response System</p>
+                </div>
+              </div>
+
+
+
+
             <nav class="nav" aria-label="Main navigation">
                 <ul class="nav-list">
                     <li><a href="#home" aria-current="page">Home</a></li>
@@ -275,7 +296,7 @@
     <section id="home" class="hero" aria-labelledby="hero-heading">
         <div class="container">
             <div class="hero-content">
-                <h2 id="hero-heading">Ensuring Tourist Safety with Advanced Technology</h2>
+                <h2 id="hero-heading">Ensuring <span>Tourist Safety</span> with Advanced Technology</h2>
                 <p>A comprehensive safety solution leveraging AI, Blockchain, and Geo-Fencing to protect tourists in unfamiliar territories.</p>
                 <div class="hero-buttons">
                     <a href="#download" class="btn btn-primary">Download App</a>
@@ -344,7 +365,7 @@
     <section id="about" class="about">
         <div class="container">
             <div class="section-header">
-                <h2>About KAVACH 360</h2>
+                <h2>About <span>KAVACH 360</span></h2>
                 <p>Revolutionizing tourist safety in high-risk regions</p>
             </div>
             <div class="about-content">
@@ -355,7 +376,7 @@
                     <h3>Background</h3>
                     <p>In regions like the Northeast, where tourism is a key economic driver, ensuring the safety of visitors is paramount. Traditional policing and manual tracking methods are insufficient in remote and high-risk areas.</p>
                     <h3>Our Solution</h3>
-                    <p>KAVACH 360 is a smart, technology-driven solution that ensures real-time monitoring, rapid response, and secure identity verification for tourists, while maintaining privacy and ease of travel.</p>
+                    <p><span>KAVACH 360</span> is a smart, technology-driven solution that ensures real-time monitoring, rapid response, and secure identity verification for tourists, while maintaining privacy and ease of travel.</p>
                     <h3>Technology Stack</h3>
                     <div class="tech-stack">
                         <span class="tech-badge">AI/ML</span>
@@ -412,7 +433,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>Download the App</h2>
-                <p>Available for tourists and authorities</p>
+                <p>Available for tourists and authorities !</p>
             </div>
             <div class="download-options">
                 <div class="download-card tourist">
@@ -421,11 +442,11 @@
                     <div class="app-buttons">
                         <a href="#" class="app-btn">
                             <i class="fab fa-google-play"></i>
-                            <span>Google Play</span>
+                            <span style="color: #000;"> Google Play</span>
                         </a>
                         <a href="#" class="app-btn">
                             <i class="fab fa-apple"></i>
-                            <span>App Store</span>
+                            <span style="color: #000;">App Store</span>
                         </a>
                     </div>
                 </div>
@@ -442,7 +463,7 @@
         <div class="container">
             <div class="section-header">
                 <h2>Verify Digital ID</h2>
-                <p>Scan or upload a KAVACH 360 QR code to verify tourist identity</p>
+                <p>Scan or upload a <span>KAVACH 360</span> QR code to verify tourist identity</p>
             </div>
             <div class="verify-content">
                 <div class="verify-options">
@@ -473,7 +494,7 @@
                 </div>
                 <div id="verificationResult" class="verification-result">
                     <div class="result-header">
-                        <h3>Verification Result</h3>
+                        <h3 style="color:white;">Verification Result</h3>
                     </div>
                     <div class="result-content">
                         <div class="result-placeholder">
@@ -487,7 +508,7 @@
                                 </div>
                                 <div class="status-text">
                                     <h4>Verified</h4>
-                                    <p>This is a valid KAVACH 360 Digital ID</p>
+                                    <p>This is a valid <span>KAVACH 360</span> Digital ID</p>
                                 </div>
                             </div>
                             <div class="tourist-info">
@@ -605,7 +626,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2023 KAVACH 360. All rights reserved.</p>
+                <p>&copy; 2025 KAVACH 360. All rights reserved.</p>
                 <p>A project by the Ministry of Tourism & Ministry of Home Affairs, Government of India</p>
             </div>
         </div>

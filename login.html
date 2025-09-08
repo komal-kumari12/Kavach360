@@ -12,9 +12,9 @@
     <style>
         :root {
             /* Color Variables */
-            --primary-color: #4361ee;
+            --primary-color: #4a6fa5;
             --primary-light: #4895ef;
-            --secondary-color: #3f37c9;
+            --secondary-color: #00c853;
             --accent-color: #4cc9f0;
             --success-color: #00C853;
             --warning-color: #FF9800;
@@ -23,6 +23,9 @@
             --light-color: #f8f9fa;
             --gray-color: #6c757d;
             --gray-light: #e9ecef;
+            --dark-color: #333;
+            --text-light: #666666;
+            --transition: all 0.3s ease;
             
             /* Layout Variables */
             --border-radius: 10px;
@@ -48,75 +51,118 @@
             line-height: 1.6;
             min-height: 100vh;
         }
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
         
-        .header {
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: var(--shadow-sm);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    padding: 15px 180px;
+    transition: var(--transition);
+}
         
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
         
-        .header .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-        }
-        
-        .logo h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin: 0;
-        }
-        
-        .tagline {
-            font-size: 12px;
-            color: var(--gray-color);
-            margin: 0;
-        }
-        
-        .nav-list {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-        
-        .nav-list a {
-            color: var(--dark-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color var(--transition-speed);
-        }
-        
-        .nav-list a:hover {
-            color: var(--primary-color);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .mobile-menu-btn span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: var(--dark-color);
-            margin: 5px 0;
-            transition: all 0.3s;
-        }
+.logo h1 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 0;
+}
+
+.tagline {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0;
+}
+
+.nav-list {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-list a {
+    color: var(--text-color);
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-list a:hover {
+    color: var(--primary-color);
+}
+
+.nav-list a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: var(--transition);
+}
+
+.nav-list a:hover::after {
+    width: 100%;
+}
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    cursor: pointer;
+}
+.mobile-menu-btn span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--dark-color);
+    border-radius: 3px;
+    transition: var(--transition);
+}
         
         main {
             padding-top: 80px;
@@ -306,7 +352,7 @@
         }
         
         /* Responsive Styles */
-        @media (max-width: 992px) {
+        /*@media (max-width: 992px) {
             .login-container {
                 flex-direction: column;
                 max-width: 600px;
@@ -350,16 +396,59 @@
                 padding: 8px 12px;
                 font-size: 12px;
             }
-        }
+        }*/
+
+        @media (max-width: 992px) {
+      .login-container { flex-direction: column; max-width: 600px; }
+      .login-banner { min-height: 200px; padding: 20px; }
+    }
+    @media (max-width: 768px) {
+      .nav-list {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        background: #fff;
+        position: absolute;
+        top: 60px; right: 20px;
+        padding: 15px;
+        box-shadow: var(--shadow-md);
+      }
+      .nav-list.active { display: flex; }
+      .mobile-menu-btn { display: flex; }
+      .login-banner h1 { font-size: 1.5rem; }
+    }
+    @media (max-width: 480px) {
+      .login-banner h1 { font-size: 1.2rem; }
+      .login-header h2 { font-size: 1.2rem; }
+      .feature { font-size: 0.8rem; padding: 6px 10px; }
+    }
+
+
+    .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between logo and text */
+}
+
+.logo-img {
+  width: 160px;   /* adjust as per your design */
+  height: 100px;
+  object-fit: contain;
+}
+
     </style>
 </head>
 <body>
+
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1>KAVACH 360</h1>
-                <p class="tagline">Smart Tourist Safety & Incident Response System</p>
-            </div>
+                <img src="SAVE_20250908_125903-removebg-preview.png" alt="Kavach 360 Logo" class="logo-img">
+                <div>
+                  <h1>KAVACH 360</h1>
+                  <p class="tagline">Smart Tourist Safety & Incident Response System</p>
+                </div>
+              </div>
             <nav class="nav" aria-label="Main navigation">
                 <ul class="nav-list">
                     <li><a href="index.html">Home</a></li>
@@ -381,8 +470,8 @@
         <div class="container">
             <div class="login-container">
                 <div class="login-banner">
-                    <h1>Welcome to Kavach360</h1>
-                    <p>Your comprehensive tourist safety platform powered by AI, Blockchain, and Geo-Fencing technologies</p>
+                    <h1 style="color: white;">Welcome to Kavach 360</h1>
+                    <p style="color: #c3e6cb;">Your comprehensive tourist safety platform powered by AI, Blockchain, and Geo-Fencing technologies</p>
                     
                     <div class="login-features">
                         <div class="feature">
